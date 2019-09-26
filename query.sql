@@ -33,3 +33,37 @@ order by a.albumTitle
 Q-3) Give lowest rated MP3 album (i.e. album with the lowest average review score). Show album title and the average score. 
 Exclude albums with only one review.
 
+select a.albumTitle, avg(r.reviewScore)
+from albums a,
+TABLE(a.albumReviews) r
+where value(a) is of (mp3_type) 
+group by a.albumTitle
+having avg(r.reviewScore)  = (select min(avg(r.reviewScore))
+                  from albums a,
+                  TABLE(a.albumReviews) r
+                  where value(a) is of (mp3_type)
+                  group by a.albumTitle
+                  having count(r.reviewScore)>1)
+intersect
+select a.albumTitle, avg(r.reviewScore)
+from albums a,
+TABLE(a.albumReviews) r
+where value(a) is of (mp3_type) 
+group by a.albumTitle
+having count(r.reviewScore)>1
+
+Q-4) Are there any albums released on all media, i.e. on MP3, audio CD and vinyl? Show albumtitle and order by album title.
+
+select a.albumTitle
+from albums a
+where value(a) is of (mp3_type)
+intersect
+select a.albumTitle
+from albums a
+where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Vinyl' 
+intersect
+select a.albumTitle
+from albums a
+where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Audio CD'
+
+
