@@ -66,4 +66,47 @@ select a.albumTitle
 from albums a
 where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Audio CD'
 
+Q-5) Implement the method discountPrice() that returns a discounted price using the following
+business rule:
+a. for audio CDs released more than one year ago the discount is 20%
+b. for vinyl records released more than one year ago the discount is 15%
+c. for MP3 downloads released more than two years ago the discount is 10%
+Note that the signature of the discountPrice method is included in the original OMDB script for
+both disk_type and mp3_type subtypes.
 
+create or replace type body disk_type as
+overriding member function discountPrice return number is discountPrice number;
+begin
+if ((sysdate() - albumReleaseDate)/365>1 and mediaType='Audio CD') then
+discountPrice := albumPrice - (albumPrice/5) ;
+end if;
+if ((sysdate() - albumReleaseDate)/365>1 and mediaType='Vinyl') then
+discountPrice := albumPrice - (albumPrice*3)/20 ;
+end if;
+return discountPrice;
+end;
+end;
+
+select a.albumPrice, a.discountPrice(),treat(value(a) as disk_type).mediaType
+from albums a
+where value(a) is of (disk_type);
+
+--------
+
+create or replace type body mp3_type as
+overriding member function discountPrice return number is discountPrice number;
+begin
+if ((sysdate() - albumReleaseDate)/365 > 2 ) then
+discountPrice := albumPrice - (albumPrice/10) ;
+end if;
+return discountPrice;
+end;
+end;
+
+select a.albumPrice, a.discountPrice()
+from albums a
+where value(a) is of (mp3_type);
+
+Q-6) Create a view all_albums that includes the columns: album title, media type ('MP3', ‘Vinyl’,
+‘Audio CD’), album price, and discount (album price – discount price). Use this view to find
+the album that received the largest discount; show all view columns. (5 marks)
