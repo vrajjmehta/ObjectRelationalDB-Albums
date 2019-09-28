@@ -106,7 +106,3 @@ end;
 select a.albumPrice, a.discountPrice()
 from albums a
 where value(a) is of (mp3_type);
-
-Q-6) Create a view all_albums that includes the columns: album title, media type ('MP3', ‘Vinyl’,
-‘Audio CD’), album price, and discount (album price – discount price). Use this view to find
-the album that received the largest discount; show all view columns. (5 marks)
