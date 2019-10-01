@@ -1,4 +1,3 @@
-------------------------------------------------------
 Q-1) Give album title, album release date and album price of all Neil Young’s albums released after 1st January 2015.
 
 select distinct a.albumTitle, a.albumReleaseDate, a.albumPrice
@@ -163,5 +162,4 @@ end;
 -------------
 select r.reviewText, a.containsText('Great',r.reviewText)
 from albums a,
-TABLE(a.albumReviews) r;
-                                        
+TABLE(a.albumReviews) r;                                       
