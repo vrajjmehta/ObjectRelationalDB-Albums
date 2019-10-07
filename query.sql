@@ -7,7 +7,7 @@ where r.artistName = 'Neil Young' and a.albumReleaseDate>'1-Jan-2015'
 
 Q-2) Give album title and artist name for albums released only in MP3 format. Order by album title. 
 
-select a.albumTitle, r.artistName
+select distinct a.albumTitle, r.artistName
 from albums a,
 TABLE (a.albumArtists) r
 where value(a) is of (mp3_type)
@@ -24,7 +24,7 @@ group by a.albumTitle
 having avg(r.reviewScore)  = (select min(avg(r.reviewScore))
                   from albums a,
                   TABLE(a.albumReviews) r
-                  where value(a) is of (mp3_type)
+                  where value(a) is of (mp3_type) 
                   group by a.albumTitle
                   having count(r.reviewScore)>1)
 intersect
@@ -48,6 +48,7 @@ intersect
 select a.albumTitle
 from albums a
 where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Audio CD'
+order by albumTitle
 
 Q-5) Implement the method discountPrice() that returns a discounted price using the following
 business rule:
@@ -94,21 +95,21 @@ Q-6) Create a view all_albums that includes the columns: album title, media type
 ‘Audio CD’), album price, and discount (album price – discount price). Use this view to find
 the album that received the largest discount; show all view columns. (5 marks)
 
-create view all_albums(albumTitle,diskType,albumPrice,discount)
+create or replace view all_albums(albumTitle,diskType,albumPrice,discount)
 as 
-select a.albumTitle,'MP3', a.albumPrice, a.discountPrice()
+select a.albumTitle,'MP3', a.albumPrice, nvl(a.albumPrice - a.discountPrice(),0)
 from albums a
-where value(a) is of (mp3_type)
+where value(a) is of (mp3_type) 
 union
-select a.albumTitle, treat(value(a) as disk_type).mediaType, a.albumPrice, a.discountPrice()
+select a.albumTitle, treat(value(a) as disk_type).mediaType, a.albumPrice, nvl(a.albumPrice - a.discountPrice(),0)
 from albums a
-where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Vinyl' 
+where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Vinyl'
 union
-select a.albumTitle, treat(value(a) as disk_type).mediaType, a.albumPrice, a.discountPrice()
+select a.albumTitle, treat(value(a) as disk_type).mediaType, a.albumPrice, nvl(a.albumPrice - a.discountPrice(),0)
 from albums a
 where value(a) is of (disk_type) and treat(value(a) as disk_type).mediaType='Audio CD'
 --------
-select a.albumTitle,a.diskType,a.albumprice,a.discount
+select a.albumTitle,a.diskType,a.albumprice,a.discount   
 from all_albums a
 group by a.albumTitle, a.diskType, a.albumprice,a.discount
 having max(a.albumprice - a.discount) = ( select max(a.albumprice - a.discount)
