@@ -163,4 +163,6 @@ end;
 -------------
 select r.reviewText, a.containsText('Great',r.reviewText)
 from albums a,
-TABLE(a.albumReviews) r;                                       
+TABLE(a.albumReviews) r;  
+
+----------
