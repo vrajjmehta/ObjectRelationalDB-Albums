@@ -1,4 +1,13 @@
-# ObjectRelationalDB_Albums<br>
+1. SCENARIO <br>
+The assignment involves design and implementation of an Online Music Database (OMDB).
+OMDB maintains information about music albums available for purchase from an online music
+store. The database supports a website that allows users to query this information and search for
+albums; visit https://music.amazon.com for an illustration of a similar website. Albums are
+available as audio CDs, vinyl records, or in MP3 format for download. The price of albums varies
+depending on the format, e.g. a vinyl record is typically more expensive than an audio CD of the
+same album. New albums are generally more expensive than used items. Note that albums with the
+same title can be released on different dates and on different media (i.e. release date, price, etc. of
+vinyl, audio CD and MP3 can have different values for the same album title). <br>
 
 Albums are described by the following attributes:<br>
 Album Title title of the album<br>
