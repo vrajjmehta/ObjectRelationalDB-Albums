@@ -1,4 +1,4 @@
-1. SCENARIO <br>
+SCENARIO <br>
 The assignment involves design and implementation of an Online Music Database (OMDB).
 OMDB maintains information about music albums available for purchase from an online music
 store. The database supports a website that allows users to query this information and search for
